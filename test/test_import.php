@@ -2,11 +2,12 @@
 
 declare(strict_types=1);
 
-require_once __DIR__ . '/private/vendor/autoload.php';
 
-$dotenvPath = __DIR__ . '/private/.env';
-if (file_exists($dotenvPath)) {
-    $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/private');
+require_once dirname(__DIR__) . '/private/vendor/autoload.php';
+
+$privatePath = dirname(__DIR__) . '/private';
+if (file_exists($privatePath . '/.env')) {
+    $dotenv = Dotenv\Dotenv::createImmutable($privatePath);
     $dotenv->load();
 }
 
@@ -33,7 +34,7 @@ try {
     echo "--- [1/4] Ініціалізація бази даних ---" . PHP_EOL;
     
     $database = new Database(
-        $_ENV['DB_HOST'] ?? "MySQL-8.4", 
+        $_ENV['DB_HOST'] ?? "localhost", 
         $_ENV['DB_NAME'] ?? "order_db", 
         $_ENV['DB_USER'] ?? "root", 
         $_ENV['DB_PASS'] ?? ""
@@ -44,7 +45,8 @@ try {
     
     $jurisdictionService = new JurisdictionService();
 
-    $filePath = __DIR__ . DIRECTORY_SEPARATOR . 'BetterMe Test-Input.csv';
+
+    $filePath = dirname(__DIR__) . '/private/App/Resurses/BetterMe Test-Input.csv';
     
     if (!file_exists($filePath)) {
         throw new Exception("Файл CSV не знайдено за шляхом: $filePath");
@@ -56,6 +58,7 @@ try {
         $headers = fgetcsv($handle, 0, ",", "\"", ""); 
         
         while (($data = fgetcsv($handle, 0, ",", "\"", "")) !== FALSE) {
+            
             if (isset($data[1], $data[2])) {
                 $coordinateList[] = [
                     'lat' => (float)$data[1], 

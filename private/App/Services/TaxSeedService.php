@@ -53,21 +53,16 @@ class TaxSeedService
 
 private function mapJsonToTaxData(array $item): array
     {
-        // Очищаємо назву від зірочок, якщо вони там були
         $jurisdiction = trim(str_replace('*', '', $item['jurisdiction'] ?? 'Unknown'));
         $reportingCode = (string)($item['reporting_code'] ?? '');
-        $totalRate = (float)($item['sales_tax_rate'] ?? 0) / 100; // 8.875 -> 0.08875
+        $totalRate = (float)($item['sales_tax_rate'] ?? 0) / 100;
 
-        // 1. Офіційна базова ставка штату NY
         $stateRate = 0.04;
-
-        // 2. Офіційний перелік зон MCTD (Metropolitan Commuter Transportation District)
         $mctdZones = [
             'New York City', 'Dutchess', 'Nassau', 'Orange', 
             'Putnam', 'Rockland', 'Suffolk', 'Westchester'
         ];
 
-        // Перевіряємо, чи входить юрисдикція до зони MCTD
         $specialRate = 0.0;
         foreach ($mctdZones as $zone) {
             if (stripos($jurisdiction, $zone) !== false) {
@@ -76,12 +71,8 @@ private function mapJsonToTaxData(array $item): array
             }
         }
 
-        // 3. Загальний місцевий залишок (Total - State - MCTD)
-        // Використовуємо round() до 5 знаків, щоб уникнути похибки чисел з плаваючою комою в PHP
         $localRemainder = round($totalRate - $stateRate - $specialRate, 5);
 
-        // 4. Логіка розподілу: Місто чи Округ?
-        // Якщо в назві є слово "City" (наприклад, New York City) - це місто. Інакше - округ.
         $isCity = stripos($jurisdiction, 'City') !== false;
 
         $countyRate = $isCity ? 0.0 : $localRemainder;
@@ -101,6 +92,6 @@ private function mapJsonToTaxData(array $item): array
 
     private function getStoragePath(string $filename): string
     {
-        return dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . $filename;
-    }
+      return dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Resurses' . DIRECTORY_SEPARATOR . $filename;
+}
 }

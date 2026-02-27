@@ -12,7 +12,7 @@ class CsvImportService
     public function __construct(
         private OrderCreationService $orderCreationService,
         private JurisdictionService $jurisdictionService,
-        private PDO $db // Конструктор очікує системний PDO
+        private PDO $db 
     ) {}
 
     public function import(string $filePath): array
@@ -36,7 +36,7 @@ class CsvImportService
         $batchData = [];
 
         while (($row = fgetcsv($handle, 0, ",", "\"", "")) !== false) {
-            // Перевірка на відповідність кількості колонок
+           
             if (count($headers) !== count($row)) continue;
 
             $data = array_combine($headers, $row);

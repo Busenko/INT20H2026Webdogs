@@ -1,13 +1,19 @@
 <?php
 declare(strict_types=1);
 
-require_once __DIR__ . '/private/vendor/autoload.php';
+require_once dirname(__DIR__) . '/private/vendor/autoload.php';
+
+$privatePath = dirname(__DIR__) . '/private';
+if (file_exists($privatePath . '/.env')) {
+    $dotenv = Dotenv\Dotenv::createImmutable($privatePath);
+    $dotenv->load();
+}
+
 
 use App\Core\Database;
 use App\Security\PasswordHasher;
 
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/private');
-$dotenv->load();
+
 
 $adminLogin = 'webdogs';
 $adminPass  = '0123webdogs-start'; 

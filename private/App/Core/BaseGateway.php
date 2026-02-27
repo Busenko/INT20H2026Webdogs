@@ -14,8 +14,7 @@ abstract class BaseGateway
     {
         $this->conn = $database->getConnection();
     }
-
-    // Додай цей метод
+    
     public function getConnection(): PDO
     {
         return $this->conn;

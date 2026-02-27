@@ -20,7 +20,6 @@ class TaxCalculatorService
         $nycDistricts = ['kings', 'queens', 'bronx', 'richmond', 'new york'];
         $lookupName = in_array($normalized, $nycDistricts) ? 'New York City' : $jurisdiction;
 
-        // ВИПРАВЛЕНО: Узгодження назв між GeoJSON та базою податків
         if ($normalized === 'st lawrence') {
             $lookupName = 'St. Lawrence';
         }
@@ -35,7 +34,6 @@ class TaxCalculatorService
 
         $tax = self::$taxCache[$lookupName];
 
-        // ВИПРАВЛЕНО: Точне округлення сум для уникнення розбіжностей у 1 копійку
         $taxRate = (float)$tax->composite_tax_rate;
         $taxAmount = round($subtotal * $taxRate, 2);
         $totalAmount = round($subtotal + $taxAmount, 2);

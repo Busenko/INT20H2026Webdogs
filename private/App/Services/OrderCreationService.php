@@ -23,13 +23,11 @@ public function createOrder(array $data): string
         $rawSubtotal = str_replace(',', '.', (string)($data['subtotal'] ?? '0'));
         $subtotal = round((float)$rawSubtotal, 2);
 
-        // Дістаємо дату з CSV
         $createdAt = $data['created_at'] ?? $data['date'] ?? date('Y-m-d H:i:s');
 
         $jurisdictionName = $this->jurisdictionService->getJurisdictionByCoordinates($lat, $lon);
         $taxData = $this->taxCalculator->calculate($jurisdictionName, $subtotal);
 
-        // Створюємо об'єкт моделі
         if ($taxData === null) {
             $order = new Order(
                 latitude: $lat,
@@ -52,7 +50,6 @@ public function createOrder(array $data): string
             );
         }
 
-        // ВИПРАВЛЕНО: Викликаємо метод create(), який точно є в OrderGateway
         return $this->orderGateway->create($order);
     }
 }

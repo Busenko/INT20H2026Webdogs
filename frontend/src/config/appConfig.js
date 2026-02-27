@@ -10,4 +10,3 @@ export const CONFIG = {
         TOKEN: 'jwt_token'
     }
 };
-// 3e2mR2*pRCHVBG%

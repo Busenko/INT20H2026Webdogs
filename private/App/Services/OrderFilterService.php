@@ -13,7 +13,6 @@ class OrderFilterService
             'limit'  => isset($queryParams['limit']) ? max(1, (int)$queryParams['limit']) : 10,
             'county' => $queryParams['county'] ?? null,
             'sort'   => ($queryParams['sort'] ?? 'DESC'),
-            // ДОДАЄМО ЦІ РЯДКИ:
             'id'     => $queryParams['id'] ?? null,
             'lat'    => $queryParams['lat'] ?? null,
             'lon'    => $queryParams['lon'] ?? null,

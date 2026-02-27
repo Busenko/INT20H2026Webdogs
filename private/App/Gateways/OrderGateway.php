@@ -101,19 +101,16 @@ public function getListWithFilters(array $filters): array
     $where = [];
     $params = [];
 
-    // Фільтрація за ID замовлення
     if (!empty($filters['id'])) {
         $where[] = "o.id = :id";
         $params[':id'] = (int)$filters['id'];
     }
 
-    // Фільтрація за юрисдикцією (округом)
     if (!empty($filters['county'])) {
         $where[] = "t.jurisdictions = :county";
         $params[':county'] = $filters['county'];
     }
 
-    // Фільтрація за координатами з округленням для точності
     if (isset($filters['lat']) && is_numeric($filters['lat'])) {
         $where[] = "ROUND(o.latitude, 4) = ROUND(:lat, 4)";
         $params[':lat'] = $filters['lat']; 
@@ -126,7 +123,6 @@ public function getListWithFilters(array $filters): array
 
     $whereSql = !empty($where) ? "WHERE " . implode(" AND ", $where) : "";
 
-    // ОНОВЛЕНО: Явно вибираємо o.* та деталі податків, щоб уникнути конфліктів ID
     $sql = "SELECT 
                 o.*, 
                 t.jurisdictions as county_name,
@@ -153,7 +149,6 @@ public function getListWithFilters(array $filters): array
     $stmt->execute();
     $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // Підрахунок загальної кількості для пагінації
     $countSql = "SELECT COUNT(*) FROM orders o 
                  LEFT JOIN order_taxes t ON o.id_tax = t.id 
                  $whereSql";

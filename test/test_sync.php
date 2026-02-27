@@ -2,10 +2,14 @@
 
 declare(strict_types=1);
 
-require_once __DIR__ . '/private/vendor/autoload.php';
+require_once dirname(__DIR__) . '/private/vendor/autoload.php';
 
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/private');
-$dotenv->load();
+$privatePath = dirname(__DIR__) . '/private';
+if (file_exists($privatePath . '/.env')) {
+    $dotenv = Dotenv\Dotenv::createImmutable($privatePath);
+    $dotenv->load();
+}
+
 
 set_error_handler("App\Core\ErrorHandler::handleError");
 set_exception_handler("App\Core\ErrorHandler::handleException");

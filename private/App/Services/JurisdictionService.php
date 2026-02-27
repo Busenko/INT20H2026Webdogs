@@ -7,24 +7,27 @@ class JurisdictionService
 {
     private array $counties = [];
     private static array $cache = [];
-
-    public function __construct()
-    {
-        $path = dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'Counties.json';
-        if (file_exists($path)) {
-            $data = json_decode(file_get_contents($path), true);
-            $features = $data['features'] ?? [];
-            
-            foreach ($features as $f) {
-                $this->counties[] = [
-                    'name'  => $f['properties']['NAME'] ?? null,
-                    'type'  => $f['geometry']['type'],
-                    'coords'=> $f['geometry']['coordinates'],
-                    'bbox'  => $this->calculateBBox($f['geometry']['coordinates'])
-                ];
-            }
+public function __construct()
+{
+    $path = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Resurses' . DIRECTORY_SEPARATOR . 'Counties.json';
+    
+    if (file_exists($path)) {
+        $data = json_decode(file_get_contents($path), true);
+        $features = $data['features'] ?? [];
+        
+        foreach ($features as $f) {
+            $this->counties[] = [
+                'name'  => $f['properties']['NAME'] ?? null, 
+                'type'  => $f['geometry']['type'],
+                'coords'=> $f['geometry']['coordinates'],
+                'bbox'  => $this->calculateBBox($f['geometry']['coordinates'])
+            ];
         }
+    } else {
+    
+        echo "КРИТИЧНА ПОМИЛКА: Файл не знайдено за шляхом: $path" . PHP_EOL;
     }
+}
 
     public function prepareCacheForCoordinates(array $coordinateList): void
     {
@@ -48,7 +51,6 @@ class JurisdictionService
     private function findJurisdictionLocally(float $lat, float $lon): ?string
     {
         foreach ($this->counties as $county) {
-            // Перевірка BBox для швидкості
             if ($lon < $county['bbox']['minX'] || $lon > $county['bbox']['maxX'] ||
                 $lat < $county['bbox']['minY'] || $lat > $county['bbox']['maxY']) continue;
 
