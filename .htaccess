@@ -1,0 +1,19 @@
+Options -Indexes
+
+RewriteEngine On
+
+RewriteCond %{REQUEST_FILENAME} !-f
+
+RewriteCond %{REQUEST_FILENAME} !-d
+
+RewriteRule ^ index.php [L]
+
+<FilesMatch "^\.env|composer\.(json|lock)$">
+
+    Order allow,deny
+
+    Deny from all
+
+</FilesMatch>
+
+RewriteRule ^private(/|$) - [F,L]
