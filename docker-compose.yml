@@ -1,0 +1,44 @@
+services:
+  # БЕКЕНД (PHP API)
+  backend:
+    build: .
+    container_name: webdogs-backend
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/var/www/html
+    environment:
+      - DB_HOST=db
+      - DB_NAME=order_db
+      - DB_USER=user
+      - DB_PASS=password
+    depends_on:
+      - db
+
+  # ФРОНТЕНД (Nginx)
+  frontend:
+    build: ./frontend
+    container_name: webdogs-frontend
+    ports:
+      - "3000:80"
+    volumes:
+      - ./frontend:/usr/share/nginx/html
+
+  # БАЗА ДАНИХ
+  db:
+    image: mysql:8.0
+    container_name: webdogs-db
+    restart: always
+    environment:
+      MYSQL_DATABASE: order_db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: rootpassword
+    volumes:
+      - ./private/base/order_db.sql:/docker-entrypoint-initdb.d/init.sql
+      - db_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+volumes:
+  db_data:
