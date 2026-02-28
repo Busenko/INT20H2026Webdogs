@@ -2,7 +2,7 @@ services:
   # КОНТЕЙНЕР ДЛЯ ЗАЛЕЖНОСТЕЙ PHP (Запуститься, встановить і вимкнеться)
   composer:
     image: composer:lts
-    container_name: webdogs-composer
+    # container_name: webdogs-composer
     volumes:
       - ./private:/app
     command: install
@@ -10,7 +10,7 @@ services:
   # БЕКЕНД (PHP API)
   backend:
     build: .
-    container_name: webdogs-backend
+    # container_name: webdogs-backend
     ports:
       - "8080:80"
     volumes:
@@ -29,7 +29,7 @@ services:
   # ФРОНТЕНД (Nginx)
   frontend:
     build: ./frontend
-    container_name: webdogs-frontend
+    # container_name: webdogs-frontend
     ports:
       - "3000:80"
     volumes:
@@ -38,7 +38,7 @@ services:
   # БАЗА ДАНИХ
   db:
     image: mysql:8.0
-    container_name: webdogs-db
+    # container_name: webdogs-db
     restart: always
     environment:
       MYSQL_DATABASE: order_db
