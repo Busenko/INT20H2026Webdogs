@@ -1,5 +1,5 @@
-const currentHost = window.location.hostname;
-const apiUrl = (currentHost === 'localhost' || currentHost === '127.0.0.1') 
+const currentPort = window.location.port;
+const apiUrl = (currentPort === '3000') 
     ? 'http://localhost:8080' 
     : 'http://webdogs';
 

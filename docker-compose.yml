@@ -1,4 +1,12 @@
 services:
+  # КОНТЕЙНЕР ДЛЯ ЗАЛЕЖНОСТЕЙ PHP (Запуститься, встановить і вимкнеться)
+  composer:
+    image: composer:lts
+    container_name: webdogs-composer
+    volumes:
+      - ./private:/app
+    command: install
+
   # БЕКЕНД (PHP API)
   backend:
     build: .
@@ -13,7 +21,10 @@ services:
       - DB_USER=user
       - DB_PASS=password
     depends_on:
-      - db
+      composer:
+        condition: service_completed_successfully
+      db:
+        condition: service_started
 
   # ФРОНТЕНД (Nginx)
   frontend:

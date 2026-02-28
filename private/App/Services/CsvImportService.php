@@ -17,10 +17,24 @@ class CsvImportService
 
     public function import(string $filePath): array
     {
-        $handle = fopen($filePath, "r");
-        if (!$handle) {
-            throw new Exception("Не вдалося відкрити файл");
+        // $handle = fopen($filePath, "r");
+        // if (!$handle) {
+        //     throw new Exception("Не вдалося відкрити файл");
+        // }
+
+        // $headers = fgetcsv($handle, 0, ",", "\"", "");
+        // if (!$headers) {
+        //     fclose($handle);
+        //     throw new Exception("Файл порожній або некоректний");
+        // }
+        $fileContent = file_get_contents($filePath);
+        if (!$fileContent) {
+            throw new Exception("Не вдалося прочитати файл");
         }
+
+        $handle = fopen('php://memory', 'r+');
+        fwrite($handle, $fileContent);
+        rewind($handle); 
 
         $headers = fgetcsv($handle, 0, ",", "\"", "");
         if (!$headers) {
