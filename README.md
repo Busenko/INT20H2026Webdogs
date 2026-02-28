@@ -1,6 +1,13 @@
 # INT20H2026Webdogs
 ## Тестове завдання
 
+## Команда
+- Максим Гервольський | м. Суми | maksimgervolskij@gmail.com | software dev, web dev, 3D modeling, AI | Python, C++, C#, Django, PHP, SQL, Blender, Adobe Photoshop
+- Артем Крамський | м. Суми | django, html/css, git/version control
+- Бусенко Іван | м. Київ | [portfolio](https://drive.google.com/file/d/1xs7w_EmILrPZzjx8iAB-YOLX74gGRERz/view)
+
+---
+
 Цей проєкт створено як розв'язання **бізнес-проблеми** для сервісу доставки дронами в штаті Нью-Йорк. Основна мета — автоматизувати розрахунок Composite Sales Tax для кожного замовлення на основі географічних координат (latitude/longitude) точки доставки.
 
 Система дозволяє імпортувати дані з CSV файлу, створювати замовлення та переглядати результати в вигляді таблиці податкових нарахувань, маючи можливість застосовувати фільтри.
