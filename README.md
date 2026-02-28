@@ -50,27 +50,30 @@ docker --version.
 ```
 Завдяки Docker вам не потрібно вручну налаштовувати сервер, PHP або базу даних.
 
-Клонуйте репозиторій:
-
+**1. Клонуйте репозиторій:**
+```
 git clone https://github.com/Busenko/INT20H2026Webdogs.git
+```
+**2. Запустіть проєкт:**
 
-Запустіть проєкт:
-
-Виконайте команду в корені проєкту:
-
+Виконайте команду в **корені проєкту**:
+```
 docker-compose up -d --build
+```
 Це автоматично збере образи, встановить залежності Composer та імпортує базу даних.
 
-Доступ до застосунку:
+**3. Доступ до застосунку - відкривайте frontend:**
+```
 Frontend: http://localhost:3000
-
+```
+```
 Backend API: http://localhost:8080
+```
 
-Уведіть логін та пароль зазначені у файлі private/.env:
+**Уведіть логін та пароль зазначені у файлі private/.env:**
 
-ADMIN_Login="webdogs"
-
-ADMIN_Pass="0123webdogs-start"
+- Login: ```webdogs```
+- Pass: ```0123webdogs-start```
 
 Варіант 2: Ручне налаштування (Open Server)
 Вимоги: PHP 8.x MySQL 8.x Composer Веб-сервер (Apache/Nginx або Open Server)
