@@ -31,7 +31,7 @@ public function __construct()
 
     public function prepareCacheForCoordinates(array $coordinateList): void
     {
-        echo "Pre-calculating for " . count($coordinateList) . " points..." . PHP_EOL;
+        // echo "Pre-calculating for " . count($coordinateList) . " points..." . PHP_EOL;
         foreach ($coordinateList as $point) {
             $lat = (float)$point['lat'];
             $lon = (float)$point['lon'];

@@ -32,8 +32,10 @@ class CsvImportService
         
         $count = 0;
         $errors = [];
-        $batchSize = 1000;
+
+        $batchSize = 2500; 
         $batchData = [];
+        $uniqueCoordinates = []; 
 
         while (($row = fgetcsv($handle, 0, ",", "\"", "")) !== false) {
            
@@ -41,21 +43,30 @@ class CsvImportService
 
             $data = array_combine($headers, $row);
 
+            $lat = (float)($data['latitude'] ?? $data['lat'] ?? 0);
+            $lon = (float)($data['longitude'] ?? $data['lon'] ?? 0);
+
             $batchData[] = [
-                'latitude'  => $data['latitude'] ?? $data['lat'] ?? 0,
-                'longitude' => $data['longitude'] ?? $data['lon'] ?? 0,
+                'latitude'  => $lat,
+                'longitude' => $lon,
                 'subtotal'  => $data['subtotal'] ?? 0,
-                'timestamp' => $data['timestamp'] ?? null
+                'timestamp' => $data['timestamp'] ?? $data['created_at'] ?? $data['date'] ?? null
             ];
 
+            $coordKey = "{$lat}_{$lon}";
+            if (!isset($uniqueCoordinates[$coordKey])) {
+                $uniqueCoordinates[$coordKey] = ['lat' => $lat, 'lon' => $lon];
+            }
+
             if (count($batchData) >= $batchSize) {
-                $this->processBatch($batchData, $count, $errors);
+                $this->processBatch($batchData, array_values($uniqueCoordinates), $count, $errors);
                 $batchData = [];
+                $uniqueCoordinates = [];
             }
         }
         
         if (!empty($batchData)) {
-            $this->processBatch($batchData, $count, $errors);
+            $this->processBatch($batchData, array_values($uniqueCoordinates), $count, $errors);
         }
 
         fclose($handle);
@@ -68,23 +79,22 @@ class CsvImportService
         ];
     }
 
-    private function processBatch(array $batchData, int &$count, array &$errors): void
+    private function processBatch(array $batchData, array $coordinates, int &$count, array &$errors): void
     {
-        $this->db->beginTransaction();
-
         try {
-            foreach ($batchData as $data) {
-                try {
-                    $this->orderCreationService->createOrder($data);
-                    $count++;
-                } catch (Exception $e) {
-                    $errors[] = "Помилка: " . $e->getMessage();
-                }
-            }
+            $this->jurisdictionService->prepareCacheForCoordinates($coordinates);
+
+            $this->db->beginTransaction();
+            $insertedCount = $this->orderCreationService->createBatch($batchData);
             $this->db->commit();
+            
+            $count += $insertedCount;
+
         } catch (Exception $e) {
-            $this->db->rollBack();
-            $errors[] = "Помилка бази даних: " . $e->getMessage();
+            if ($this->db->inTransaction()) {
+                $this->db->rollBack();
+            }
+            $errors[] = "Помилка пакету: " . $e->getMessage();
         }
     }
 }

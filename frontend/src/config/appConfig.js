@@ -1,7 +1,10 @@
-const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+const currentHost = window.location.hostname;
+const apiUrl = (currentHost === 'localhost' || currentHost === '127.0.0.1') 
+    ? 'http://localhost:8080' 
+    : 'http://webdogs';
 
 export const CONFIG = {
-    API_URL: isLocal ? 'http://localhost:8080' : 'http://webdogs',
+    API_URL: apiUrl,
     
     ENDPOINTS: {
         LOGIN: '/login',

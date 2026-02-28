@@ -81,11 +81,9 @@ export class ImportForm {
         nav.style.pointerEvents = 'none';
         nav.style.opacity = '0.5';
 
-        // Ініціалізація таймера
         this.startTime = Date.now();
         this.timerInterval = setInterval(() => this.updateTimer(), 100);
 
-        // Імітація прогресу для UX
         let fakeProgress = 0;
         const progressInterval = setInterval(() => {
             if (fakeProgress < 90) {
@@ -99,7 +97,6 @@ export class ImportForm {
 
         const res = await OrderService.importCsv(this.view.state.selectedFile);
 
-        // Зупинка таймерів
         clearInterval(this.timerInterval);
         clearInterval(progressInterval);
         

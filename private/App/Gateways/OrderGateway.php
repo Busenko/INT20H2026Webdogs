@@ -172,4 +172,31 @@ public function getListWithFilters(array $filters): array
         ]
     ];
 }
+public function insertBatch(array $orders): void
+    {
+        if (empty($orders)) {
+            return;
+        }
+
+        $values = [];
+        $placeholders = [];
+        
+        foreach ($orders as $order) {
+            $placeholders[] = '(?, ?, ?, ?, ?, ?, ?)';
+
+            $values[] = $order->latitude;
+            $values[] = $order->longitude;
+            $values[] = $order->subtotal;
+            $values[] = $order->tax_amount;
+            $values[] = $order->total_amount;
+            $values[] = $order->id_tax;
+            $values[] = $order->created_at;
+        }
+
+        $sql = "INSERT INTO orders (latitude, longitude, subtotal, tax_amount, total_amount, id_tax, created_at) 
+                VALUES " . implode(', ', $placeholders);
+
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute($values);
+    }
 }
