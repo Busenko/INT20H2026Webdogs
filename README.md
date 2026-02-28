@@ -74,52 +74,60 @@ Backend API: http://localhost:8080
 
 - Login: ```webdogs```
 - Pass: ```0123webdogs-start```
+---
+### Варіант 2: Ручне налаштування (Open Server)
 
-Варіант 2: Ручне налаштування (Open Server)
-Вимоги: PHP 8.x MySQL 8.x Composer Веб-сервер (Apache/Nginx або Open Server)
-
-Клонуйте репозиторій:
-
+**1. Клонуйте репозиторій:**
+```
 git clone https://github.com/Busenko/INT20H2026Webdogs.git
+```
+**2. Перемістіть вміст папки INT20H2026Webdogs у нову папку Webdogs.**
+Розмістіть папку Webdogs у директорію вашого локального сервера (наприклад, для Open Server Panel: ```home/Webdogs```).
 
-Перемістіть вміст папки INT20H2026Webdogs у нову папку Webdogs.
-
-Розмістіть папку Webdogs у директорію вашого локального сервера (наприклад, для Open Server Panel: home/Webdogs).
-
-Конфігурація Open Server (.osp)
+**3. Конфігурація Open Server (.osp)**
 Відкрийте папку .osp у корені проєкту.
-
-Перевірте або створіть файл project.ini з наступним вмістом:
-
+Перевірте або створіть файл ```project.ini``` з наступним вмістом:
+```
 [Webdogs]
 php_engine = PHP-8.4
+```
 Запустіть або перезапустіть Open Server Panel.
 
-Встановіть PHP залежності:
+**4. Встановіть PHP залежності:**
 
 Для роботи з JWT та файлами конфігурації .env необхідно встановити бібліотеки через Composer
-
+```
 cd private
+```
+```
 composer install
-Налаштуйте базу даних:
-Створіть базу даних (наприклад, order_db) у MySQL.
+```
 
-Імпортуйте структуру з файлу base/order_db.sql.
-
-Налаштуйте підключення у файлі private/.env:
-
+**5. Налаштуйте базу даних:**
+- Створіть базу даних ```order_db``` у MySQL.
+- Імпортуйте структуру з файлу ```base/order_db.sql```.
+- Налаштуйте підключення у файлі private/.env:
+```
 DB_HOST=MySQL-8.4          хост
 DB_NAME=order_db           назва бази
 DB_USER=root               користувач
 DB_PASS=                   пароль (порожній або ваш)
-Налаштування Frontend
-Перейдіть у файл frontend/src/config/appConfig.js.
+```
 
-Оновіть параметр API_URL, вказавши адресу, на якій працює ваш PHP-сервер (наприклад, домен в Open Server):
+**6. Налаштування Frontend**
+Перейдіть у файл ```frontend/src/config/appConfig.js```.
+Оновіть параметр API_URL, вказавши адресу, на якій працює ваш PHP-сервер (наприклад: домен в Open Server):
+```
+export const CONFIG = {
+   
+const currentPort = window.location.port;
+const apiUrl = (currentPort === '3000') 
+    ? 'http://localhost:8080' 
+    **: 'http://webdogs';  // Вкажіть URL вашого локального бекенду**
 
 export const CONFIG = {
-    // Вкажіть URL вашого локального бекенду
-    API_URL: 'http://webdogs', 
+    API_URL: apiUrl,
+    
     ENDPOINTS: {
         LOGIN: '/login',
         ORDERS: '/orders',
@@ -130,30 +138,29 @@ export const CONFIG = {
         TOKEN: 'jwt_token'
     }
 };
-Коли backend та база даних налаштовані та запущені!
-
+```
+**7. Коли backend та база даних налаштовані та запущені!**
 Запуск файлу frontend/index.html через VS Code - Live Server
 Оскільки додаток використовує ES-модулі (import/export), відкриття файлу index.html просто подвійним кліком у браузері не працюватиме через політику CORS.
 
-Інструкція для Visual Studio Code:
+**Інструкція для Visual Studio Code:**
 
-Відкрийте корінь проєкту у VS Code.
+- Відкрийте корінь проєкту у VS Code.
+ 
+- Переконайтеся, що у вас встановлено розширення Live Server.
 
-Переконайтеся, що у вас встановлено розширення Live Server.
+- Натисніть правою кнопкою миші на файл ```frontend/index.html```.
 
-Натисніть правою кнопкою миші на файл frontend/index.html.
+- Оберіть "Open with Live Server".
 
-Оберіть "Open with Live Server".
+- Додаток відкриється за адресою http://127.0.0.1:5500/frontend/index.html.
 
-Додаток відкриється за адресою http://127.0.0.1:5500/frontend/index.html.
+**Уведіть логін та пароль зазначені у файлі private/.env:**
 
-Уведіть логін та пароль зазначені у файлі private/.env:
+- Login: ```webdogs```
+- Pass: ```0123webdogs-start```
 
-ADMIN_Login="webdogs"
-
-ADMIN_Pass="0123webdogs-start"
-
-Джерела даних та інструменти
+## Джерела даних та інструменти
 Географічні межі (Civil Boundaries) Дані про кордони округів та міст штату Нью-Йорк взяті з офіційного геопорталу
 Джерело: https://gis.ny.gov/civil-boundaries Використання: Ці дані стали основою для визначення юрисдикції за координатами (Latitude/Longitude).
 
